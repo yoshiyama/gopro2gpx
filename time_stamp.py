@@ -1,8 +1,20 @@
+""""
+This program extracts frames from a video, adding timestamps and updating EXIF data with the capture time. It retrieves the video's start time, duration, and frame rate, then calculates timestamps for each frame. Using `ffmpeg`, it extracts frames at these times, applies timestamps directly onto the images, and saves them with modified EXIF data indicating the capture time. The program also generates a text file listing all frames with their corresponding timestamps.
+"""
+import argparse
 import subprocess
 import datetime
 from PIL import Image, ImageDraw, ImageFont
 import os
 import piexif
+
+# Command-line arguments setup
+parser = argparse.ArgumentParser(description="Extract frames from a video, adding timestamps and updating EXIF data with the capture time.")
+parser.add_argument('video_file', type=str, help='Path to the video file.')
+parser.add_argument('output_dir', type=str, help='Output directory for the extracted frames.')
+parser.add_argument('timestamp_file', type=str, help='File to save the timestamps of the frames.')
+
+args = parser.parse_args()
 
 # 動画のメタデータから撮影開始時刻、長さ、フレームレートを取得
 def get_video_metadata(video_path):
@@ -62,7 +74,7 @@ def extract_frames_with_timestamps(video_path, output_folder, start_time, durati
         for i in range(total_frames):
             offset_seconds = i / frame_rate
             timestamp = start_time + datetime.timedelta(seconds=offset_seconds)
-            img_path = f'{output_folder}/img{i:03d}.jpg'
+            img_path = f'{output_folder}/img{i:05d}.jpg'
 
             # 動画の開始からのオフセット時間を秒単位で計算
             seek_time = offset_seconds
@@ -78,10 +90,16 @@ def extract_frames_with_timestamps(video_path, output_folder, start_time, durati
             # タイムスタンプをテキストファイルに記録
             f.write(f'{img_path}: {timestamp}\n')
 
-# 実行
-video_file = '/mnt/f/GoPro-Seto_Danchi/20231006/Back/GH020239.MP4'
-output_dir = '/mnt/f/GoPro-Seto_Danchi/20231006/Back/GH020239'
-timestamp_file = '/mnt/f/GoPro-Seto_Danchi/20231006/Back/GH020239/timestamps.txt'
+# Main execution
+if __name__ == "__main__":
+    video_file = args.video_file
+    output_dir = args.output_dir
+    timestamp_file = args.timestamp_file
+
+# # 実行
+# video_file = '/mnt/f/GoPro-Seto_Danchi/20231006/Back/GH020239.MP4'
+# output_dir = '/mnt/f/GoPro-Seto_Danchi/20231006/Back/GH020239'
+# timestamp_file = '/mnt/f/GoPro-Seto_Danchi/20231006/Back/GH020239/timestamps.txt'
 
 start_time, duration, frame_rate = get_video_metadata(video_file)
 extract_frames_with_timestamps(video_file, output_dir, start_time, duration, frame_rate, timestamp_file)
