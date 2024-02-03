@@ -213,6 +213,12 @@ def main_core(args):
             f.close()
 
         data += gpmf.parseStream(raw_data, config.verbose)
+        # 以下を追記した。ファイル名を取得して、それをmp4_file_nameに渡す。
+        mp4_file_name = os.path.splitext(os.path.basename(filename))[0]
+        print("mp4_file_name", mp4_file_name)
+        kml = gpshelper.generate_KML(points, file_name=output_file, mp4_file_name=mp4_file_name)
+        with open("%s.kml" % args.outputfile , "w+") as fd:
+            fd.write(kml)
 
     points, start_time, device_name = BuildGPSPoints(data, skip=args.skip, skipDop=args.skip_dop, dopLimit=args.dop_limit)
 

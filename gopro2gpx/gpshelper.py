@@ -137,29 +137,35 @@ def generate_GPX(points, start_time=None, trk_name="exercise"):
 
 
 
-def generate_KML(gps_points):
+# def generate_KML(gps_points, file_name="Track"):
+def generate_KML(gps_points, file_name="Track", mp4_file_name=""):
     """
+    Generates a KML file content.
 
     use this for color
     http://www.zonums.com/gmaps/kml_color/
 
     """
-
+    # < name > {file_name} < / name >
+    # <PolyStyle>
+    #     <color>7f00ff00</color>
+    # </PolyStyle>
     kml_template = """<?xml version="1.0" encoding="UTF-8"?>
     <kml xmlns="http://www.opengis.net/kml/2.2"> <Document>
-    <name>Demo</name>
-    <description>Description Demo</description>
+    <name>%s</name>
+    <description>%s Description Demo</description>
     <Style id="yellowLineGreenPoly">
         <LineStyle>
             <color>FF1400BE</color>
             <width>4</width>
-            </LineStyle>
+        </LineStyle>
         <PolyStyle>
-            <color>7f00ff00</color>
+            # <color>7f00ff00</color>
+            <fill>0</fill>
         </PolyStyle>
     </Style>
     <Placemark>
-        <name>Track Title</name>
+        <name>%s Track Title</name>
         <description>Track Description</description>
         <styleUrl>#yellowLineGreenPoly</styleUrl>
         <LineString>
@@ -182,7 +188,8 @@ def generate_KML(gps_points):
         lines.append(s)
 
     coords = os.linesep.join(lines)
-    kml = kml_template % coords
+    kml = kml_template % (mp4_file_name, file_name, file_name, coords)
+    # kml = kml_template % coords
     return(kml)
 
 
