@@ -1,4 +1,4 @@
-# python script.py "F:\GoPro-Seto_Danchi\20231006\Front\GH020240" "/path/to/target/directory" 10
+# python copy_sampling.py "F:\GoPro-Seto_Danchi\20231006\Front\GH020240" "/path/to/target/directory" 10
 
 
 
