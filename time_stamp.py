@@ -1,5 +1,8 @@
 """"
 This program extracts frames from a video, adding timestamps and updating EXIF data with the capture time. It retrieves the video's start time, duration, and frame rate, then calculates timestamps for each frame. Using `ffmpeg`, it extracts frames at these times, applies timestamps directly onto the images, and saves them with modified EXIF data indicating the capture time. The program also generates a text file listing all frames with their corresponding timestamps.
+
+usage: python time_stamp.py [-h] video_file(.mp4) output_dir timestamp_file(.txt)
+
 """
 import argparse
 import subprocess
